@@ -1,44 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Csv_Enumerable
 {
-    class CsvEnumerable : IEnumerable, IEnumerator
+    public class CsvEnumerable : IEnumerable<CsvRecord>, IEnumerator<CsvRecord>
     {
-        class CsvRecord
-        {
-            public List<string> Fields { get; private set; }
-
-            public CsvRecord(string strRecord)
-            {
-                var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
-                var mc = regex.Matches(strRecord);
-                Fields = new List<string>();
-                foreach (var item in mc)
-                {
-                    Fields.Add(item.ToString());
-                }
-            }
-
-            public override string ToString()
-            {
-                var stringBuilder = new StringBuilder();
-                foreach (var item in Fields)
-                {
-                    stringBuilder.Append(item);
-                    stringBuilder.Append(";");
-                }
-                if (stringBuilder.Length > 0)
-                {
-                    stringBuilder.Remove(stringBuilder.Length - 1, 1);
-                }
-                return stringBuilder.ToString();
-            }
-        }
-
         private bool disposed = false;
         int position = -1;
         List<CsvRecord> records;
@@ -66,6 +34,44 @@ namespace Csv_Enumerable
             }
         }
 
+        CsvRecord IEnumerator<CsvRecord>.Current
+        {
+            get
+            {
+                return records[position];
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // Protected implementation of Dispose pattern.
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+
+            if (disposing)
+            {
+                // Free any other managed objects here.
+                //
+                records = null;
+            }
+            // Free any unmanaged objects here.
+            //
+
+            disposed = true;
+        }
+
+        ~CsvEnumerable()
+        {
+            Dispose(false);
+        }
+
+
         public IEnumerator GetEnumerator()
         {
             return this;
@@ -85,6 +91,11 @@ namespace Csv_Enumerable
         public void Reset()
         {
             position = -1;
+        }
+
+        IEnumerator<CsvRecord> IEnumerable<CsvRecord>.GetEnumerator()
+        {
+            return this;
         }
     }
 }

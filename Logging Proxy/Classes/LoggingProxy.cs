@@ -29,7 +29,7 @@ namespace Logging_Proxy
             if (stringBuilder.Length > 0)
                 stringBuilder.Remove(stringBuilder.Length - 1, 1);
 
-            Console.WriteLine($"Invoking method {methodInfo.Name} ( {stringBuilder.ToString()} )");
+            Console.WriteLine($"{DateTime.Now:s} Invoking method {methodInfo.Name} ( {stringBuilder.ToString()} )");
             result = methodInfo.Invoke(base.obj, args);
             return true;
         }
