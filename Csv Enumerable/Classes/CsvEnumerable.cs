@@ -48,7 +48,6 @@ namespace Csv_Enumerable
             GC.SuppressFinalize(this);
         }
 
-        // Protected implementation of Dispose pattern.
         protected virtual void Dispose(bool disposing)
         {
             if (disposed)
@@ -56,12 +55,8 @@ namespace Csv_Enumerable
 
             if (disposing)
             {
-                // Free any other managed objects here.
-                //
                 records = null;
             }
-            // Free any unmanaged objects here.
-            //
 
             disposed = true;
         }

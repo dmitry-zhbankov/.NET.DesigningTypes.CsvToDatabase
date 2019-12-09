@@ -13,6 +13,7 @@ namespace Csv_Enumerable
             Id = id;
             var regex = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)");
             var mc = regex.Matches(strRecord);
+
             Fields = new List<string>();
             foreach (var item in mc)
             {

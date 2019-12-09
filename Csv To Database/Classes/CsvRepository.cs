@@ -3,7 +3,6 @@ using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Linq;
 using System.Text;
 
 namespace Csv_To_Database
@@ -23,6 +22,7 @@ namespace Csv_To_Database
                 Field0 TEXT
                 );";
             connection?.Open();
+
             var command = new SqliteCommand(sqlExpression, connection);
             command.ExecuteNonQuery();
             command.Dispose();
@@ -75,6 +75,7 @@ namespace Csv_To_Database
             {
                 AddColumns(colCount, entity.Fields.Count);
             }
+
             sqlExpression = CreateInsertStr(entity.Fields);
             using (var command = new SqliteCommand(sqlExpression, connection))
             {
@@ -108,6 +109,7 @@ namespace Csv_To_Database
                     colCount = item.Fields.Count;
                 }
             }
+
             var sb = new StringBuilder();
             foreach (var item in range)
             {
@@ -128,6 +130,7 @@ namespace Csv_To_Database
                 sb.Append($"ALTER TABLE Records ADD Field{i} TEXT;");
                 sb.Append("\r\n");
             }
+
             var sqlExpression = sb.ToString();
             using (var command1 = new SqliteCommand(sqlExpression, connection))
             {
@@ -150,6 +153,7 @@ namespace Csv_To_Database
             {
                 sb.Remove(sb.Length - 1 - 4, 4);
             }
+
             var sqlExpression = sb.ToString();
             using (var command1 = new SqliteCommand(sqlExpression, connection))
             {
@@ -173,6 +177,7 @@ namespace Csv_To_Database
                 sb.Remove(sb.Length - 1, 1);
             }
             sb.Append($"WHERE Id={entity.Id}");
+
             var sqlExpression = sb.ToString();
             using (var command1 = new SqliteCommand(sqlExpression, connection))
             {
@@ -248,7 +253,6 @@ namespace Csv_To_Database
             GC.SuppressFinalize(this);
         }
 
-        // Protected implementation of Dispose pattern.
         protected virtual void Dispose(bool disposing)
         {
             if (disposed)
@@ -256,12 +260,8 @@ namespace Csv_To_Database
 
             if (disposing)
             {
-                // Free any other managed objects here.
-                //
                 instance = null;
             }
-            // Free any unmanaged objects here.
-            //
             connection?.Close();
             connection?.Dispose();
             disposed = true;

@@ -1,10 +1,9 @@
 ﻿using Csv_Enumerable;
 using Logging_Proxy;
 using Microsoft.Extensions.Configuration;
-using System.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 
 namespace Csv_To_Database
 {

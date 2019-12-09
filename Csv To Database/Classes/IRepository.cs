@@ -1,7 +1,6 @@
 ﻿using Csv_Enumerable;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace Csv_To_Database
 {
@@ -10,8 +9,6 @@ namespace Csv_To_Database
         T GetById(int id);
 
         IEnumerable<T> GetAll();
-
-        //IEnumerable<T> GetList(Expression<Func<T, bool>> predicate);
 
         void Add(T entity);
 
