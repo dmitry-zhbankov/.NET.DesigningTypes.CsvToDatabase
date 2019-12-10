@@ -2,12 +2,12 @@
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Csv_To_Database
 {
-    class CsvRepository : IRepository<CsvRecord>, IDisposable
+    class CsvRepository : IAsyncRepository<CsvRecord>, IDisposable
     {
         static SqliteConnection connection;
         static CsvRepository instance;
@@ -67,30 +67,30 @@ namespace Csv_To_Database
             return sb.ToString();
         }
 
-        public void Add(CsvRecord entity)
+        public async Task AddAsync(CsvRecord entity)
         {
-            var colCount = GetColumnsCount();
+            var colCount = await GetColumnsCount();
             var sqlExpression = $"pragma table_info(Records)";
             if (colCount < entity.Fields.Count)
             {
-                AddColumns(colCount, entity.Fields.Count);
+                await AddColumns(colCount, entity.Fields.Count);
             }
 
             sqlExpression = CreateInsertStr(entity.Fields);
             using (var command = new SqliteCommand(sqlExpression, connection))
             {
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
 
-        int GetColumnsCount()
+        async Task<int> GetColumnsCount()
         {
             var sqlExpression = $"pragma table_info('Records')";
             var colCount = 0;
             using (var command = new SqliteCommand(sqlExpression, connection))
             {
                 var reader = command.ExecuteReader();
-                while (reader.Read())
+                while (await reader.ReadAsync())
                 {
                     colCount++;
                 }
@@ -98,14 +98,14 @@ namespace Csv_To_Database
             return colCount;
         }
 
-        public void AddRange(IEnumerable<CsvRecord> range)
+        public async Task AddRangeAsync(IEnumerable<CsvRecord> range)
         {
-            var colCount = GetColumnsCount();
+            var colCount = await GetColumnsCount();
             foreach (var item in range)
             {
                 if (colCount < item.Fields.Count)
                 {
-                    AddColumns(colCount, item.Fields.Count);
+                    await AddColumns(colCount, item.Fields.Count);
                     colCount = item.Fields.Count;
                 }
             }
@@ -118,11 +118,11 @@ namespace Csv_To_Database
             var sqlExpression = sb.ToString();
             using (var command = new SqliteCommand(sqlExpression, connection))
             {
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
 
-        void AddColumns(int colCount, int fieldCount)
+        async Task AddColumns(int colCount, int fieldCount)
         {
             var sb = new StringBuilder();
             for (int i = colCount - 1; i < fieldCount; i++)
@@ -134,11 +134,11 @@ namespace Csv_To_Database
             var sqlExpression = sb.ToString();
             using (var command1 = new SqliteCommand(sqlExpression, connection))
             {
-                command1.ExecuteNonQuery();
+                await command1.ExecuteNonQueryAsync();
             }
         }
 
-        public void Delete(CsvRecord entity)
+        public async Task DeleteAsync(CsvRecord entity)
         {
             var colCount = GetColumnsCount();
             var sb = new StringBuilder();
@@ -157,13 +157,13 @@ namespace Csv_To_Database
             var sqlExpression = sb.ToString();
             using (var command1 = new SqliteCommand(sqlExpression, connection))
             {
-                command1.ExecuteNonQuery();
+                await command1.ExecuteNonQueryAsync();
             }
         }
 
-        public void Edit(CsvRecord entity)
+        public async Task EditAsync(CsvRecord entity)
         {
-            int colCount = GetColumnsCount();
+            int colCount = await GetColumnsCount();
             var sb = new StringBuilder();
             sb.Append($"UPDATE Records SET ");
             int i = 0;
@@ -185,7 +185,7 @@ namespace Csv_To_Database
             }
         }
 
-        public IEnumerable<CsvRecord> GetAll()
+        public async Task<IEnumerable<CsvRecord>> GetAllAsync()
         {
             var sqlExpression = "SELECT * FROM Records ORDER BY Id";
             var list = new List<CsvRecord>();
@@ -193,8 +193,8 @@ namespace Csv_To_Database
             {
                 var reader = command.ExecuteReader();
                 var sb = new StringBuilder();
-                var colCount = GetColumnsCount();
-                while (reader.Read())
+                var colCount = await GetColumnsCount();
+                while (await reader.ReadAsync())
                 {
                     var Id = (long)reader.GetValue(0);
                     int i = 1;
@@ -214,16 +214,16 @@ namespace Csv_To_Database
             return list;
         }
 
-        public CsvRecord GetById(int id)
+        public async Task<CsvRecord> GetByIdAsync(int id)
         {
             var sqlExpression = $"SELECT * FROM Records WHERE Id={id}";
             using (var command = new SqliteCommand(sqlExpression, connection))
             {
                 var reader = command.ExecuteReader();
-                if (reader.Read())
+                if (await reader.ReadAsync())
                 {
                     var sb = new StringBuilder();
-                    var colCount = GetColumnsCount();
+                    var colCount = await GetColumnsCount();
 
                     var Id = (long)reader.GetValue(0);
                     int i = 1;
@@ -240,11 +240,6 @@ namespace Csv_To_Database
                 }
             }
             return null;
-        }
-
-        public IEnumerable<CsvRecord> GetList(Expression<Func<CsvRecord, bool>> predicate)
-        {
-            throw new NotImplementedException();
         }
 
         public void Dispose()

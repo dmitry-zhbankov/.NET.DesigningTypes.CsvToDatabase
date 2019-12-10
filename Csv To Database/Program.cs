@@ -4,12 +4,13 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Csv_To_Database
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
             var configuration = builder.Build();
@@ -17,32 +18,32 @@ namespace Csv_To_Database
             var conStr = configuration["ConnectionString"];
 
             IEnumerable<CsvRecord> csvEnumerable = new CsvEnumerable(csvFile);
-            IRepository<CsvRecord> repository = CsvRepository.GetInstance(conStr);
+            IAsyncRepository<CsvRecord> repository = CsvRepository.GetInstance(conStr);
 
-            var proxy = new LoggingProxy<IRepository<CsvRecord>>();
+            var proxy = new LoggingProxy<IAsyncRepository<CsvRecord>>();
             repository = proxy.CreateInstance(repository);
 
-            repository.AddRange(csvEnumerable);
+            await repository.AddRangeAsync(csvEnumerable);
 
-            var records = repository.GetAll();
+            var records = await repository.GetAllAsync();
             WriteAll(records);
 
             Console.WriteLine("Delete first record");
-            repository.Delete(records.First());
+            await repository.DeleteAsync(records.First());
 
-            records = repository.GetAll();
+            records = await repository.GetAllAsync();
             WriteAll(records);
 
             Console.WriteLine("Edit last record");
-            CsvRecord record = records.Last();
+            var record = records.Last();
             record.Fields[0] = "2019";
-            repository.Edit(record);
+            await repository.EditAsync(record);
 
-            records = repository.GetAll();
+            records = await repository.GetAllAsync();
             WriteAll(records);
 
             Console.WriteLine("Get record with Id=2");
-            record = repository.GetById(2);
+            record = await repository.GetByIdAsync(2);
             Console.WriteLine(record);
 
             Console.ReadKey();

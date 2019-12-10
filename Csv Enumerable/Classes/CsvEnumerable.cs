@@ -55,7 +55,6 @@ namespace Csv_Enumerable
 
             if (disposing)
             {
-                records = null;
             }
 
             disposed = true;
