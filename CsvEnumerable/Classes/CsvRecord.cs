@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Csv_Enumerable
+namespace CsvEnumerable
 {
     public class CsvRecord : EntityBase
     {

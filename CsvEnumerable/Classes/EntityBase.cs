@@ -1,4 +1,4 @@
-﻿namespace Csv_Enumerable
+﻿namespace CsvEnumerable
 {
     public abstract class EntityBase
     {

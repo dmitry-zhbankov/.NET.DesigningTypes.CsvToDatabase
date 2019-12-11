@@ -3,7 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <RootNamespace>Csv_To_Database</RootNamespace>
+    <RootNamespace>CsvToDatabase</RootNamespace>
+    <AssemblyName>CsvToDatabase</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Csv Enumerable\Csv Enumerable.csproj" />
-    <ProjectReference Include="..\Logging Proxy\Logging Proxy.csproj" />
+    <ProjectReference Include="..\CsvEnumerable\CsvEnumerable.csproj" />
+    <ProjectReference Include="..\LoggingProxy\LoggingProxy.csproj" />
   </ItemGroup>
 
   <ItemGroup>

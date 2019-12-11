@@ -3,7 +3,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 
-namespace Logging_Proxy
+namespace LoggingProxy
 {
     public class LoggingProxy<T> : DynamicProxy<T> where T : class
     {

@@ -1,9 +1,9 @@
-﻿using Csv_Enumerable;
+﻿using CsvEnumerable;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Csv_To_Database
+namespace CsvToDatabase
 {
     public interface IAsyncRepository<T> : IDisposable where T : EntityBase
     {

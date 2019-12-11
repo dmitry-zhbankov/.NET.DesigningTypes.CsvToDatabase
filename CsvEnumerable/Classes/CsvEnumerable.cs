@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Csv_Enumerable
+namespace CsvEnumerable
 {
     public class CsvEnumerable : IEnumerable<CsvRecord>, IEnumerator<CsvRecord>
     {
-        private bool disposed = false;
+        private bool disposed;
         int position = -1;
         List<CsvRecord> records;
 
@@ -26,13 +26,7 @@ namespace Csv_Enumerable
             }
         }
 
-        public object Current
-        {
-            get
-            {
-                return records[position];
-            }
-        }
+        public object Current => records[position];
 
         CsvRecord IEnumerator<CsvRecord>.Current
         {

@@ -1,12 +1,12 @@
-﻿using Csv_Enumerable;
-using Logging_Proxy;
+﻿using CsvEnumerable;
+using LoggingProxy;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Csv_To_Database
+namespace CsvToDatabase
 {
     class Program
     {
@@ -17,7 +17,7 @@ namespace Csv_To_Database
             var csvFile = configuration["FilePath"];
             var conStr = configuration["ConnectionString"];
 
-            IEnumerable<CsvRecord> csvEnumerable = new CsvEnumerable(csvFile);
+            IEnumerable<CsvRecord> csvEnumerable = new CsvEnumerable.CsvEnumerable(csvFile);
             IAsyncRepository<CsvRecord> repository = CsvRepository.GetInstance(conStr);
 
             var proxy = new LoggingProxy<IAsyncRepository<CsvRecord>>();

@@ -1,17 +1,17 @@
-﻿using Csv_Enumerable;
+﻿using CsvEnumerable;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Csv_To_Database
+namespace CsvToDatabase
 {
-    class CsvRepository : IAsyncRepository<CsvRecord>, IDisposable
+    class CsvRepository : IAsyncRepository<CsvRecord>
     {
         static SqliteConnection connection;
         static CsvRepository instance;
-        bool disposed = false;
+        bool disposed;
 
         private CsvRepository(string connectionString)
         {
@@ -256,8 +256,7 @@ namespace Csv_To_Database
             if (disposing)
             {
                 instance = null;
-            }
-            connection?.Close();
+            }            
             connection?.Dispose();
             disposed = true;
         }

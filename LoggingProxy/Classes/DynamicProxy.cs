@@ -1,7 +1,7 @@
 ﻿using ImpromptuInterface;
 using System.Dynamic;
 
-namespace Logging_Proxy
+namespace LoggingProxy
 {
     public class DynamicProxy<T> : DynamicObject where T : class
     {
