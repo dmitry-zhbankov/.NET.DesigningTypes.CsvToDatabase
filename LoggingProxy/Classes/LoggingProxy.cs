@@ -20,7 +20,7 @@ namespace LoggingProxy
             var stringBuilder = new StringBuilder();
             var pars = methodInfo.GetParameters();
 
-            for (int i = 0; i < args.Length; i++)
+            for (var i = 0; i < args.Length; i++)
             {
                 stringBuilder.Append($"{types[i]} {pars[i].Name} = \"{args[i]}\"");
                 stringBuilder.Append(",");
@@ -29,8 +29,8 @@ namespace LoggingProxy
             if (stringBuilder.Length > 0)
                 stringBuilder.Remove(stringBuilder.Length - 1, 1);
 
-            Console.WriteLine($"{DateTime.Now:s} Invoking method {methodInfo.Name} ( {stringBuilder.ToString()} )");
-            result = methodInfo.Invoke(base.obj, args);
+            Console.WriteLine($"{DateTime.Now:s} Invoking method {methodInfo.Name} ( {stringBuilder} )");
+            result = methodInfo.Invoke(obj, args);
             return true;
         }
     }

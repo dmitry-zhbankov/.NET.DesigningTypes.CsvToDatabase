@@ -6,7 +6,7 @@ namespace CsvEnumerable
 {
     public class CsvRecord : EntityBase
     {
-        public List<string> Fields { get; private set; }
+        public List<string> Fields { get; }
 
         public CsvRecord(string strRecord, long id = 0)
         {

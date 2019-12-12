@@ -7,7 +7,6 @@ namespace CsvEnumerable
 {
     public class CsvEnumerable : IEnumerable<CsvRecord>, IEnumerator<CsvRecord>
     {
-        private bool disposed;
         int position = -1;
         List<CsvRecord> records;
 
@@ -27,14 +26,8 @@ namespace CsvEnumerable
         }
 
         public object Current => records[position];
-
-        CsvRecord IEnumerator<CsvRecord>.Current
-        {
-            get
-            {
-                return records[position];
-            }
-        }
+        
+        CsvRecord IEnumerator<CsvRecord>.Current => records[position];
 
         public void Dispose()
         {
@@ -44,21 +37,7 @@ namespace CsvEnumerable
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposed)
-                return;
-
-            if (disposing)
-            {
-            }
-
-            disposed = true;
         }
-
-        ~CsvEnumerable()
-        {
-            Dispose(false);
-        }
-
 
         public IEnumerator GetEnumerator()
         {
